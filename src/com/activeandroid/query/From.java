@@ -296,6 +296,7 @@ public final class From implements Sqlable {
         return sqlString(sql);
     }
 
+    @Nullable
 	public <T extends Model> List<T> execute() {
 		if (mQueryBase instanceof Select) {
 			return SQLiteUtils.rawQuery(mType, toSql(), getArguments());
