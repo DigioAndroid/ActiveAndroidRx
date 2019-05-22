@@ -16,6 +16,7 @@ package com.activeandroid.query;
  * limitations under the License.
  */
 
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
 import com.activeandroid.Cache;
@@ -317,6 +318,7 @@ public final class From implements Sqlable {
         }
     }
 
+    @Nullable
 	public <T extends Model> T executeSingle() {
 		if (mQueryBase instanceof Select) {
 			limit(1);
