@@ -1,8 +1,9 @@
 package com.activeandroid.sqlbrite;
 
 import android.database.Cursor;
-import android.support.annotation.CheckResult;
-import android.support.annotation.NonNull;
+import androidx.annotation.CheckResult;
+import androidx.annotation.NonNull;
+
 import com.activeandroid.sqlbrite.SqlBrite.Query;
 import java.util.List;
 import rx.Observable;

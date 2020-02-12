@@ -20,6 +20,8 @@ import android.database.Cursor;
 import android.os.Build;
 import android.text.TextUtils;
 
+import androidx.annotation.Nullable;
+
 import com.activeandroid.Cache;
 import com.activeandroid.Model;
 import com.activeandroid.TableInfo;
@@ -107,9 +109,9 @@ public final class SQLiteUtils {
         Cache.openDatabase().execute(sql, bindArgs);
     }
 
-    public static <T extends Model> List<T> rawQuery(Class<? extends Model> type, String sql, String[] selectionArgs) {
+    public static <T extends Model> List<T> rawQuery(Class<? extends Model> type, String sql, String[] selectionArgs, @Nullable ErrorCallback callback) {
         Cursor cursor = Cache.openDatabase().query(sql, selectionArgs);
-        List<T> entities = processCursor(type, cursor);
+        List<T> entities = processCursor(type, cursor, callback);
         cursor.close();
 
         return entities;
@@ -127,7 +129,7 @@ public final class SQLiteUtils {
                         try {
 
                             Cursor cursor = query.run();
-                            return (T) processCursor(type, cursor);
+                            return (T) processCursor(type, cursor, null);
 
                         } catch (Exception ex) {
                             ex.printStackTrace();
@@ -150,7 +152,7 @@ public final class SQLiteUtils {
     }
 
     public static <T extends Model> T rawQuerySingle(Class<? extends Model> type, String sql, String[] selectionArgs) {
-        List<T> entities = rawQuery(type, sql, selectionArgs);
+        List<T> entities = rawQuery(type, sql, selectionArgs, null);
 
         if (entities.size() > 0) {
             return entities.get(0);
@@ -349,7 +351,7 @@ public final class SQLiteUtils {
     }
 
     @SuppressWarnings("unchecked")
-    public static <T extends Model> List<T> processCursor(Class<? extends Model> type, Cursor cursor) {
+    public static <T extends Model> List<T> processCursor(Class<? extends Model> type, Cursor cursor, @Nullable ErrorCallback callback) {
         TableInfo tableInfo = Cache.getTableInfo(type);
         String idName = tableInfo.getIdName();
         final List<T> entities = new ArrayList<T>();
@@ -385,6 +387,9 @@ public final class SQLiteUtils {
                             "2. populate fields"
             );
         } catch (Exception e) {
+            if (callback != null) {
+                callback.errorReceived(e);
+            }
             Log.e("Failed to process cursor.", e);
         }
 

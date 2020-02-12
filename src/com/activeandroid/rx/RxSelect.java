@@ -104,7 +104,7 @@ public class RxSelect<T extends Model> {
                     public List<T> call(SqlBrite.Query query) {
                         try {
                             Cursor cursor = query.run();
-                            List<T> result = SQLiteUtils.processCursor(mType, cursor);
+                            List<T> result = SQLiteUtils.processCursor(mType, cursor,null);
                             cursor.close();
                             return result;
                         } catch (Exception ex) {
