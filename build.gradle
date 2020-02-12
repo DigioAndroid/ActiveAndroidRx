@@ -17,6 +17,7 @@ sourceSets {
 
 repositories {
     mavenCentral()
+    google()
 }
 
 dependencies {
